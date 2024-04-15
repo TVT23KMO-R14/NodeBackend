@@ -1,3 +1,4 @@
+require('dotenv').config();
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -7,7 +8,11 @@ const cors = require("cors");
 
 const pool = require('./dbconnection')
 
-
+//useria ja autentikointia loginia ja rekisteröitymistä varten
+const user = require('./routes/usersRoute');
+const auth = require('./routes/authenticationRoute')
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' })
 
 var indexRouter = require('./routes/index');
 var groupMemberRouter = require('./routes/groupMemberRoute');
@@ -26,16 +31,26 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 
+app.use('/user', user);
+app.use('/auth', auth);
+
 app.use('/', indexRouter);
 app.use('/groupmember', groupMemberRouter);
 app.use('/search', searchRouter);
+app.use(upload.none());
+
+const PORT = process.env.PORT || 3001;
+
+app.listen(PORT, () => {
+    console.log('Server running on port ' + PORT);
+});
 
 // Tietokantayhteyden testaus
 pool.query('SELECT NOW()', (err, res) => {
   if (err) {
       console.error('Tietokantayhteyden virhe', err);
   } else {
-      console.log('Tietokantayhteys muodostettu onnistuneesti');
+      console.log('Tietokantayhteys muodostettu onnistuneesti'); 
   }
 });
 

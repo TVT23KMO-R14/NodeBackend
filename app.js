@@ -3,8 +3,10 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const cors = require("cors");
 
 const pool = require('./dbconnection')
+
 
 
 var indexRouter = require('./routes/index');
@@ -22,11 +24,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(cors());
 
 app.use('/', indexRouter);
 app.use('/groupmember', groupMemberRouter);
 app.use('/search', searchRouter);
 
+// Tietokantayhteyden testaus
 pool.query('SELECT NOW()', (err, res) => {
   if (err) {
       console.error('Tietokantayhteyden virhe', err);

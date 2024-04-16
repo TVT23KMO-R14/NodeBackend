@@ -1,35 +1,36 @@
 require('dotenv').config();
 const router = require('express').Router();
 const bcrypt = require('bcrypt')
-const { register, getPw } = require('..//models/authenticationModel')
+const { register, getPassword } = require('..//models/authenticationModel')
 const jwt = require('jsonwebtoken')
 
 
 router.post('/register', async (req, res) => {
-  const fname = req.body.fname;
-  const lname = req.body.lname;
-  const username = req.body.username;
-  const pw = req.body.pw;
+  const firstName = req.body.firstName;
+  const lastName = req.body.lastName;
+  const userName = req.body.userName;
+  const password = req.body.password;
+  const email = req.body.email;
 
 
-  const hashPw = await bcrypt.hash(pw, 10);
+  const hashPw = await bcrypt.hash(password, 10);
 
-  await register(fname, lname, username, hashPw);
+  await register(firstName, lastName, userName, hashPw, email);
   res.end();
 
 });
 
 router.post('/login', async (req, res) => {
-  const uname = req.body.username;
-  const pw = req.body.pw;
+  const uname = req.body.userName;
+  const password = req.body.password;
 
-  const db_pw = await getPw(uname);
+  const db_pw = await getPassword(uname);
 
   if (db_pw) {
-    const isAuth = await bcrypt.compare(pw, db_pw); 
+    const isAuth = await bcrypt.compare(password, db_pw); 
     if (isAuth) {
       //luodaan token
-      const token = jwt.sign({username: uname}, process.env.JWT_SECRET);
+      const token = jwt.sign({userName: uname}, process.env.JWT_SECRET);
       res.status(200).json({jwtToken: token},);
 
     } else {

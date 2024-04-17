@@ -6,13 +6,24 @@ const sql = {
 }
 
 async function register(firstName, lastName, userName, passwordHash, email) {
-  await pgPool.query(sql.REGISTER_USER, [firstName, lastName, userName, passwordHash, email])
+  try {
+    await pgPool.query(sql.REGISTER_USER, [firstName, lastName, userName, passwordHash, email])
+    console.log('Successfully registered new user');
+  } catch(err) {
+      throw new Error('Error inserting data into database', err)
+  }
+  
 }  
 
 async function getPassword(username) {
-  const result = await pgPool.query(sql.GET_PASSWORD, [username]);
+  try {
+    const result = await pgPool.query(sql.GET_PASSWORD, [username]);
+    console.log('Successfully fetched password');
+    return result.rowCount > 0 ? result.rows[0].pw : null;
+  } catch(err) {
+    throw new Error('Error getting password', err)
+  }
 
-  return result.rowCount > 0 ? result.rows[0].pw : null;
 
 }
 

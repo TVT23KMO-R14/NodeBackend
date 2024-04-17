@@ -1,19 +1,12 @@
 const pgPool = require('./pgConnection');
 
 const sql = {
-  REGISTER: 'INSERT INTO users ("firstName", "lastName", "userName", "password", "email")',
+  REGISTER_USER: 'INSERT INTO users("firstName", "lastName", "userName", password, email) VALUES ($1,$2,$3,$4,$5)',
   GET_PASSWORD: 'SELECT password FROM users WHERE userName=$1'
 }
 
 async function register(firstName, lastName, userName, passwordHash, email) {
-  try {
-    await pgPool.query(sql.REGISTER, [firstName, lastName, userName, passwordHash, email])
-    console.log("User registered successfully");
-    return { success: true };
-  } catch {
-    console.error('Registration failed:', error);
-    return { success: false, error: error.message };
-  }
+  await pgPool.query(sql.REGISTER_USER, [firstName, lastName, userName, passwordHash, email])
 }  
 
 async function getPassword(username) {

@@ -2,10 +2,11 @@ const { use } = require('../routes/groupRoute');
 const pgPool = require('./pgConnection');
 
 const sql = {
-  GET_ALL_GROUPS: 'SELECT "idGroup", "groupName", "groupDescription" FROM group', 
+  GET_ALL_GROUPS: 'SELECT "idGoup", "groupName", "groupDescription" FROM group',
   GET_GROUP: 'SELECT idGroup, groupName, groupDescription FROM group WHERE idGroup=$1',
+  REMOVE_GROUP: 'DELETE FROM group WHERE idGroup=$1',
+  ADD_GROUP: 'INSERT INTO group (groupName, groupDescription) VALUES ($1, $2)',
 }
-
 
 async function getGroups() {
   let result = await pgPool.query(sql.GET_ALL_GROUPS);
@@ -13,22 +14,26 @@ async function getGroups() {
   return result.rows;
 }
 
-async function getGroup(groupId) {
-  let result = await pgPool.query(sql.GET_GROUP, [groupId]);
+async function getGroup(idGroup) {
+  let result = await pgPool.query(sql.GET_GROUP, [idGroup]);
   console.log(result.rows[0]);
   return result.rows[0];
 }
 
-/* poistetaan tämä kokonaan ellei tarvitse muokattuna johonkin.
-async function addNote(username, msg) {
+async function addGroup(groupName, groupDescription) {
   try {
-    await pgPool.query(sql.ADD_NOTE, [msg, username]);
-  } catch(err) {
-      //throw new Error('Username not found!')
-      throw new Error(err)
+    await pgPool.query(sql.ADD_GROUP, [groupName, groupDescription]);
+  } catch (err) {
+    throw new Error(err)
   }
-  
 }
-*/
 
-module.exports = { getUsers, getUser };
+async function removeGroup(groupId) {
+  try {
+    await pgPool.query(sql.REMOVE_GROUP, [groupId]);
+  } catch (err) {
+    throw new Error(err)
+  }
+}
+
+module.exports = { getGroups, getGroup, addGroup, removeGroup};

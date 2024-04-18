@@ -1,0 +1,8 @@
+extends index
+
+block endpoints
+  h3 List of Endpoints:
+  p This is the list of endpoints that are available in the API.
+  ul
+    each route in routes
+      li #{route.method} #{route.path}

@@ -2,10 +2,10 @@ const { use } = require('../routes/groupRoute');
 const pgPool = require('./pgConnection');
 
 const sql = {
-  GET_ALL_GROUPS: 'SELECT "idGoup", "groupName", "groupDescription" FROM group',
+  GET_ALL_GROUPS: 'SELECT "idGroup", "groupName", "groupDescription" FROM "group"',
   GET_GROUP: 'SELECT idGroup, groupName, groupDescription FROM group WHERE idGroup=$1',
   REMOVE_GROUP: 'DELETE FROM group WHERE idGroup=$1',
-  ADD_GROUP: 'INSERT INTO group (groupName, groupDescription) VALUES ($1, $2)',
+  ADD_GROUP: 'INSERT INTO "group" ("groupName", "groupDescription") VALUES ($1, $2)',
 }
 
 async function getGroups() {
@@ -23,6 +23,7 @@ async function getGroup(idGroup) {
 async function addGroup(groupName, groupDescription) {
   try {
     await pgPool.query(sql.ADD_GROUP, [groupName, groupDescription]);
+    return "Group added successfully!"
   } catch (err) {
     throw new Error(err)
   }

@@ -1,5 +1,5 @@
-const { getGroups, getGroup, addGroup, removeGroup, printMessage } = require('../models/groupModel')
-const { auth } = require('../middleware/auth')
+const { getGroups, getGroup, addGroup, removeGroup} = require('../models/groupModel')
+//const { auth } = require('../middleware/auth')
 
 const router = require('express').Router()
 
@@ -22,17 +22,17 @@ router.get('/one', async (req, res) => {
   }
 })
 
-router.post('/add', auth, async (req, res) => {
+router.post('/add', async (req, res) => {
   try {
-    await addGroup(req.body.groupName, req.body.groupDescription)
-    res.end()
+    const result = await addGroup(req.body.groupName, req.body.groupDescription)
+    res.render('result', { title: 'Group added', message: result, groupname: req.body.groupName, groupdescription: req.body.groupDescription});
   } catch (err) {
     res.status(404).json({ error: err.message })
   }
   res.end()
 })
 
-router.post('/remove', auth, async (req, res) => {
+router.post('/remove', async (req, res) => {
   try {
     await removeGroup(req.body.groupId)
     res.end()

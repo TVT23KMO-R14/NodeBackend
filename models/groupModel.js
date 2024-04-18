@@ -3,8 +3,8 @@ const pgPool = require('./pgConnection');
 
 const sql = {
   GET_ALL_GROUPS: 'SELECT "idGroup", "groupName", "groupDescription" FROM "group"',
-  GET_GROUP: 'SELECT idGroup, groupName, groupDescription FROM group WHERE idGroup=$1',
-  REMOVE_GROUP: 'DELETE FROM group WHERE idGroup=$1',
+  GET_GROUP: 'SELECT "idGroup", "groupName", "groupDescription" FROM "group" WHERE "idGroup"=$1',
+  REMOVE_GROUP: 'DELETE FROM "group" WHERE "idGroup"=$1',
   ADD_GROUP: 'INSERT INTO "group" ("groupName", "groupDescription") VALUES ($1, $2)',
 }
 
@@ -31,7 +31,9 @@ async function addGroup(groupName, groupDescription) {
 
 async function removeGroup(groupId) {
   try {
-    await pgPool.query(sql.REMOVE_GROUP, [groupId]);
+    let result = await pgPool.query(sql.REMOVE_GROUP, [groupId]);
+    console.log(result.rowCount)
+    return result.rowCount
   } catch (err) {
     throw new Error(err)
   }

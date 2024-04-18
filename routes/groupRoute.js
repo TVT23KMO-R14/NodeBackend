@@ -32,10 +32,10 @@ router.post('/add', async (req, res) => {
   res.end()
 })
 
-router.post('/remove', async (req, res) => {
+router.delete('/remove', async (req, res) => {
   try {
-    await removeGroup(req.body.groupId)
-    res.end()
+    const result = await removeGroup(req.query.groupId)
+    res.render('result', { title: 'Group removal result', message: 'Returned value:', groupname: 'deleted rows: ' + result});
   } catch (err) {
     res.status(404).json({ error: err.message })
   }

@@ -30,9 +30,6 @@ router.get('/quicksearch', async (req, res) => {
     }
 });
 
-
-
-
 router.get('/headersearch', async (req, res) => {
     const { page, query } = req.query;
     try {

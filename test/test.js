@@ -40,22 +40,6 @@ describe('Search', function() {
 });
 
 
-it('should fail when the API key is wrong', async function() {
-  const res = await chai.request(app)
-      .get('/search/headersearch')
-      .query({
-          query: 'some_query',
-          api_key: 'incorrect_key', 
-          page: 1
-      });
-      console.log('Response Body:', res.body); 
-
-  expect(res).to.have.status(401);
-  expect(res.body).to.have.property('success', false);
-});
-
-
-
 describe('Search', function() {
   this.timeout(5000);
 

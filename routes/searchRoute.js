@@ -30,18 +30,8 @@ router.get('/quicksearch', async (req, res) => {
     }
 });
 
-
-// check api key
 router.get('/headersearch', async (req, res) => {
-    const { api_key, page, query } = req.query;
-    const validApiKey = process.env.TMDB_API_KEY;
-
-    if (api_key !== validApiKey) {
-        return res.status(401).json({
-            success: false,
-            status_message: "Invalid API key: You must be granted a valid key."
-        });
-    }
+    const { page, query } = req.query;
     try {
         const results = await searchModel.headerSearch(page, query);
         res.json(results);

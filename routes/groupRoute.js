@@ -1,5 +1,4 @@
 const { getGroups, getGroup, addGroup, removeGroup} = require('../models/groupModel')
-//const { auth } = require('../middleware/auth')
 
 const router = require('express').Router()
 

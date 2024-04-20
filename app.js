@@ -16,7 +16,7 @@ const user = require('./routes/usersRoute');
 const auth = require('./routes/authenticationRoute')
 const multer = require('multer');
 const upload = multer({ dest: 'uploads/' })
-
+const reviewRouter = require('./routes/reviewRoute');
 var indexRouter = require('./routes/index');
 var groupMemberRouter = require('./routes/groupMemberRoute');
 var searchRouter = require('./routes/searchRoute');
@@ -40,10 +40,13 @@ app.use('/auth', auth);
 app.use('/', indexRouter);
 app.use('/groupmember', groupMemberRouter);
 app.use('/search', searchRouter);
+app.use('/review', reviewRouter);
+
+
 app.use(upload.none());
 
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 
 app.listen(PORT, () => {
     console.log('Server running on port ' + PORT);

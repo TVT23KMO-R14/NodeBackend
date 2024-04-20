@@ -18,7 +18,7 @@ const multer = require('multer');
 const upload = multer({ dest: 'uploads/' })
 const reviewRouter = require('./routes/reviewRoute');
 var indexRouter = require('./routes/index');
-var groupMemberRouter = require('./routes/groupMemberRoute');
+const groupMemberRouter = require('./routes/groupMemberRoute');
 var searchRouter = require('./routes/searchRoute');
 
 
@@ -33,6 +33,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
+app.use(upload.none());
 
 app.use('/group', groupRouter);
 app.use('/user', user);
@@ -42,8 +43,6 @@ app.use('/groupmember', groupMemberRouter);
 app.use('/search', searchRouter);
 app.use('/review', reviewRouter);
 
-
-app.use(upload.none());
 
 
 const PORT = process.env.PORT || 3001;

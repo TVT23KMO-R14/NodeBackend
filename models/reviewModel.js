@@ -1,5 +1,5 @@
 const { use } = require('../routes/reviewRoute');
-const pgPool = require('./pgConnection');
+const pgPool = require('../dbconnection');
 
 const sql = {
   GET_ALL_REVIEWS: 'SELECT * FROM "review"',

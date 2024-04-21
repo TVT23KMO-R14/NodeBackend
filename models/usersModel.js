@@ -1,5 +1,5 @@
 const { use } = require('../routes/usersRoute');
-const pgPool = require('./pgConnection');
+const pgPool = require('../dbconnection');
 
 const sql = {
   GET_ALL_USERS: 'SELECT "idUser", "firstName", "lastName", "userName", email FROM users', 

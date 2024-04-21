@@ -1,5 +1,5 @@
 const { use } = require('../routes/groupRoute');
-const pgPool = require('./pgConnection');
+const pgPool = require('../dbconnection');
 
 const sql = {
   GET_ALL_GROUPS: 'SELECT "idGroup", "groupName", "groupDescription" FROM "group"',

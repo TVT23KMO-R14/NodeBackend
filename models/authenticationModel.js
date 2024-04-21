@@ -1,4 +1,4 @@
-const pgPool = require('./pgConnection');
+const pgPool = require('../dbconnection');
 
 const sql = {
   REGISTER_USER: 'INSERT INTO users("firstName", "lastName", "userName", password, email) VALUES ($1,$2,$3,$4,$5)',

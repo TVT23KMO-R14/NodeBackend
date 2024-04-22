@@ -1,5 +1,5 @@
-const { use } = require('../routes/groupRoute');
-const pgPool = require('../dbconnection');
+const { use } = require('../routes/groupRoute')
+const pgPool = require('../dbconnection')
 
 const sql = {
   GET_ALL_GROUPS: 'SELECT "idGroup", "groupName", "groupDescription" FROM "group"',
@@ -9,21 +9,29 @@ const sql = {
 }
 
 async function getGroups() {
-  let result = await pgPool.query(sql.GET_ALL_GROUPS);
-  console.log(result.rows);
-  return result.rows;
+  try {
+    const result = await pgPool.query(sql.GET_ALL_GROUPS)
+    console.log(result.rows)
+    return result.rows
+  } catch (err) {
+    throw new Error(err)
+  }
 }
 
 async function getGroup(idGroup) {
-  let result = await pgPool.query(sql.GET_GROUP, [idGroup]);
-  console.log(result.rows[0]);
-  return result.rows[0];
+  try {
+    const result = await pgPool.query(sql.GET_GROUP, [idGroup])
+    console.log(result.rows[0])
+    return result.rows[0]
+  } catch (err) {
+    throw new Error(err)
+  }
 }
 
 async function addGroup(groupName, groupDescription) {
   try {
-    await pgPool.query(sql.ADD_GROUP, [groupName, groupDescription]);
-    return "Group added successfully!"
+    result = await pgPool.query(sql.ADD_GROUP, [groupName, groupDescription])
+    return result.rowCount
   } catch (err) {
     throw new Error(err)
   }
@@ -31,7 +39,7 @@ async function addGroup(groupName, groupDescription) {
 
 async function removeGroup(groupId) {
   try {
-    let result = await pgPool.query(sql.REMOVE_GROUP, [groupId]);
+    const result = await pgPool.query(sql.REMOVE_GROUP, [groupId]);
     console.log(result.rowCount)
     return result.rowCount
   } catch (err) {
@@ -39,4 +47,4 @@ async function removeGroup(groupId) {
   }
 }
 
-module.exports = { getGroups, getGroup, addGroup, removeGroup};
+module.exports = { getGroups, getGroup, addGroup, removeGroup }

@@ -53,7 +53,11 @@ router.get('/one', async (req, res) => {
 router.put('/update', async (req, res) => {
     try {
         const result = await updateRole(req.body.userId, req.body.groupId, req.body.role)
-        res.render('groupAdded', { title: 'Role updated', message: result, userId: req.body.userId, groupId: req.body.groupId })
+        if (result === 0) {
+            res.status(404).json({ error: 'User not found in group', status: 404})
+        } else {
+            res.status(200).json({message: "Role updated", status: 200})
+        }
     } catch (err) {
         res.status(404).json({ error: err.message })
     }
@@ -64,7 +68,11 @@ router.put('/update', async (req, res) => {
 router.get('/groupsbymember', async (req, res) => {
     try {
         const groups = await getGroupsByMember(req.query.userId)
-        res.json(groups)
+        if (groups.length === 0) {
+            res.status(404).json({error: 'No groups found for member', status: 404})
+        }else{
+            res.json(groups)
+        }
     } catch (err) {
         res.status(404).json({ error: err.message })
     }
@@ -74,7 +82,11 @@ router.get('/groupsbymember', async (req, res) => {
 router.get('/membersbygroup', async (req, res) => {
     try {
         const members = await getMembersByGroup(req.query.groupId)
-        res.json(members)
+        if (members.length === 0) {
+            res.status(404).json({error: 'No members found in group', status: 404})
+        }else{
+            res.json(members)
+        }
     } catch (err) {
         res.status(404).json({ error: err.message })
     }

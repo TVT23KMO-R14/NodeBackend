@@ -31,7 +31,7 @@ router.post('/login', async (req, res) => {
     if (isAuth) {
       //luodaan token
       const token = jwt.sign({userName: uname}, process.env.JWT_SECRET);
-      res.status(200).json({jwtToken: token},);
+      res.status(200).json({jwtToken: token});
 
     } else {
       res.status(401).json({ error: 'Wrong password' });

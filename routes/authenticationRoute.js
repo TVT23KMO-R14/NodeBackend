@@ -2,7 +2,8 @@ require('dotenv').config();
 const router = require('express').Router();
 const bcrypt = require('bcrypt')
 const { register, getPassword } = require('..//models/authenticationModel')
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
+const { response } = require('express');
 
 
 router.post('/register', async (req, res) => {
@@ -14,9 +15,12 @@ router.post('/register', async (req, res) => {
 
 
   const hashPw = await bcrypt.hash(password, 10);
-
-  await register(firstName, lastName, userName, hashPw, email);
-  res.end();
+  try {
+    await register(firstName, lastName, userName, hashPw, email);
+    res.status(201).json({ response: 'User created successfully' });
+  } catch (error) {
+    res.status(404).json({ error: 'Registration failed' })
+  }
 
 });
 
@@ -27,11 +31,11 @@ router.post('/login', async (req, res) => {
   const db_pw = await getPassword(uname);
 
   if (db_pw) {
-    const isAuth = await bcrypt.compare(password, db_pw); 
+    const isAuth = await bcrypt.compare(password, db_pw);
     if (isAuth) {
       //luodaan token
-      const token = jwt.sign({userName: uname}, process.env.JWT_SECRET);
-      res.status(200).json({jwtToken: token},);
+      const token = jwt.sign({ userName: uname }, process.env.JWT_SECRET);
+      res.status(200).json({ jwtToken: token });
 
     } else {
       res.status(401).json({ error: 'Wrong password' });

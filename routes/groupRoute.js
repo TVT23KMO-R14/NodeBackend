@@ -23,8 +23,9 @@ router.get('/one', async (req, res) => {
 
 router.post('/add', async (req, res) => {
   try {
-    const result = await addGroup(req.body.groupName, req.body.groupDescription)
-    res.render('result', { title: 'Group added', message: result, groupname: req.body.groupName, groupdescription: req.body.groupDescription});
+    const result = await addGroup(req.body.groupName, req.body.groupDescription, req.body.groupLogo)
+    res.status(201).json({ message: result })
+    //res.render('result', { title: 'Group added', message: result, groupname: req.body.groupName, groupdescription: req.body.groupDescription, grouplogo: req.body.groupLogo});
   } catch (err) {
     res.status(404).json({ error: err.message })
   }

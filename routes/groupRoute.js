@@ -30,13 +30,14 @@ router.get('/one', async (req, res) => {
 
 router.post('/add', async (req, res) => {
   try {
-    const result = await addGroup(req.body.groupName, req.body.groupDescription)
+    const result = await addGroup(req.body.groupName, req.body.groupDescription, req.body.groupLogo)
     if (result === 0) {
       res.status(404).json({ error: 'Group not added', status: 404})
     }else{
       res.status(201).json({message: "Group added", status: 201})
     }
-    //res.render('result', { title: 'Group added', message: result, groupname: req.body.groupName, groupdescription: req.body.groupDescription});
+    //res.status(201).json({ message: result })
+    //res.render('result', { title: 'Group added', message: result, groupname: req.body.groupName, groupdescription: req.body.groupDescription, grouplogo: req.body.groupLogo});
   } catch (err) {
     res.status(404).json({ error: err.message })
   }

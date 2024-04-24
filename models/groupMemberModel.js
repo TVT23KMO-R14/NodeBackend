@@ -49,8 +49,8 @@ async function getGroupMember(userId, groupId) {
 
 async function updateRole(userId, groupId, role) {
     try {
-        await pool.query(sql.UPDATE_ROLE, [userId, groupId, role])
-        return "Role updated successfully!"
+        result = await pool.query(sql.UPDATE_ROLE, [userId, groupId, role])
+        return result.rowCount
     } catch (err) {
         throw new Error(err)
     }

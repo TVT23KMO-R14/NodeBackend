@@ -40,5 +40,35 @@ router.get('/headersearch', async (req, res) => {
     }
 });
 
+router.get('/onemovie', async (req, res) => {
+    const { id } = req.query
+    console.log(id)
+    try {
+        const results = await searchModel.getOneMovie(id)
+        if (results === null) {
+            res.status(404).json({ error: 'Movie not found' })
+        } else {
+            res.json(results);
+        }
+    } catch (error) {
+        res.status(500).json({ error: 'Error fetching data' })
+    }
+})
+
+router.get('/oneseries', async (req, res) => {
+    const { id } = req.query
+    console.log(id)
+    try {
+        const results = await searchModel.getOneSeries(id)
+        if (results === null) {
+            res.status(404).json({ error: 'Series not found' })
+        } else {
+            res.json(results);
+        }
+    } catch (error) {
+        res.status(500).json({ error: 'Error fetching data' })
+    }
+})
+
 
 module.exports = router;

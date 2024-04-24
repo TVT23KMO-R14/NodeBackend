@@ -47,8 +47,42 @@ const headerSearch = async (page, query) => {
     }
 };
 
+const getOneMovie = async (movieId) => {
+    const url = `https://api.themoviedb.org/3/movie/${movieId}`
+    const params = {
+        api_key: process.env.TMDB_API_KEY,
+        language: 'en-US'
+    }
+
+    try {
+        const response = await axios.get(url, { params })
+        return response.data
+    } catch (error) {
+        console.error('Error fetching data from TMDB', error)
+        throw new Error('Failed to fetch data from TMDB', error)
+    }
+}
+
+const getOneSeries = async (seriesId) => {
+    const url = `https://api.themoviedb.org/3/tv/${seriesId}`
+    const params = {
+        api_key: process.env.TMDB_API_KEY,
+        language: 'en-US'
+    }
+
+    try {
+        const response = await axios.get(url, { params })
+        return response.data
+    } catch (error) {
+        console.error('Error fetching data from TMDB', error)
+        throw new Error('Failed to fetch data from TMDB', error)
+    }
+}
+
 
 module.exports = {
     getSearch,
-    headerSearch
+    headerSearch,
+    getOneMovie,
+    getOneSeries    
 }

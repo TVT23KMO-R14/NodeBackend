@@ -34,10 +34,13 @@ router.post('/login', async (req, res) => {
   if (db_pw) {
     const isAuth = await bcrypt.compare(password, db_pw);
     if (isAuth) {
-      //luodaan token
-      const token = jwt.sign({ userName: uname }, process.env.JWT_SECRET);
-      res.status(200).json({ jwtToken: token });
-
+      if (process.env.JWT_SECRET === undefined || process.env.JWT_SECRET === null || process.env.JWT_SECRET.length === '') {
+        res.status(500).json({ error: 'JWT_SECRET is not set or too short' })
+      } else {
+        //luodaan token
+        const token = jwt.sign({ userName: uname }, process.env.JWT_SECRET);
+        res.status(200).json({ jwtToken: token });
+      }
     } else {
       res.status(401).json({ error: 'Wrong password' });
     }

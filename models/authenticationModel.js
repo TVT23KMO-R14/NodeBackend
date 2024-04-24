@@ -23,7 +23,7 @@ async function getPassword(username) {
     console.log('Successfully fetched password');
     console.log(result)
     console.log(username)
-    return result.rowCount > 0 ? result.rows[0].password : 'salasana';
+    return result.rowCount > 0 ? result.rows[0].password : null;
 
   } catch (err) {
     throw new Error('Error getting password', err)

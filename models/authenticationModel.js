@@ -61,4 +61,4 @@ async function deleteUser(userName, password) {
   }
 }
 
-module.exports = { register, getPassword, deleteUser }   
+module.exports = { register, getPasswordAndId, deleteUser }   

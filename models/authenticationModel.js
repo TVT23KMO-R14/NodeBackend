@@ -1,8 +1,8 @@
-const pgPool = require('../dbconnection');
+const pgPool = require('../dbconnection')
 
 const sql = {
   REGISTER_USER: 'INSERT INTO users("firstName", "lastName", "userName", password, email) VALUES ($1,$2,$3,$4,$5)',
-  GET_PASSWORD: 'SELECT password FROM users WHERE "userName"=$1'
+  GET_PASSWORD: 'SELECT password, "idUser" FROM users WHERE "userName"=$1'
 }
 
 async function register(firstName, lastName, userName, passwordHash, email) {
@@ -12,26 +12,25 @@ async function register(firstName, lastName, userName, passwordHash, email) {
   } catch(err) {
       throw new Error('Error inserting data into database', err)
   }
-  
 }  
 
-async function getPassword(username) {
+async function getPasswordAndId(username) {
   try {
+    console.log('Fetching password for user: ' + username)
     const result = await pgPool.query(sql.GET_PASSWORD, [username]);
     console.log('Successfully fetched password');
-    console.log(result)
-    console.log(username)
+    console.log('Resultti'+ result)
+    console.log('Username' + username)
+    console.log('Password' + result.rows[0].password)
+    console.log('IdUser' + result.rows[0].idUser)
     if (result.rowCount > 0) {
-      return result.rows[0].password;
+      return result
     } else {
       throw new Error('User not found')
-    }
-    
+    }    
   } catch(err) {
     throw new Error('Error getting password', err)
   }
-
-
 }
 
-module.exports = {register, getPassword}   
+module.exports = {register, getPasswordAndId}

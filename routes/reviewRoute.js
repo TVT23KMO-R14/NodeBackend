@@ -5,13 +5,13 @@ const router = require('express').Router()
 router.get('/all', async (req, res) => {
     try {
         const reviews = await getReviews()
-        if (reviews.length === 0) {
+        if (reviews.rowCount === 0) {
             res.status(404).json({ error: 'Reviews not found' })
         }else{
             res.json(reviews)
         }
     } catch (err) {
-        res.status(404).json({ error: err.message })
+        res.status(404).json({ error: ' /all haku ' + err.message })
     }
 })
 
@@ -60,7 +60,7 @@ router.get('/byuser', async (req, res) => {
     try {
         const reviews = await getReviewsByUser(req.query.idUser);
         if (reviews.length === 0) {
-            res.status(404).json({ error: 'Reviews not found' })
+            throw new Error('Reviews not found by this user')
         }else{
         res.json(reviews)
         }

@@ -13,13 +13,9 @@ const sql = {
 
 async function getReviews() {
   try {
-    pgPool.query(sql.GET_ALL_REVIEWS, (err, result) => {
-      if (err) {
-        throw new Error(err)
-      }
-      console.log(result.rows);
-      return result.rows;
-    })
+    let result = await pgPool.query(sql.GET_ALL_REVIEWS);
+    console.log(result.rows);
+    return result.rows;
   }
   catch (err) {
     throw new Error(err)
@@ -27,55 +23,55 @@ async function getReviews() {
 }
 
 async function getReview(idReview) {
-        try {
-          let result = await pgPool.query(sql.GET_REVIEW, [idReview]);
-          console.log(result);
-          return result.rows[0];
-        }
-        catch (err) {
-          throw new Error(err)
-        }
-      }
+  try {
+    let result = await pgPool.query(sql.GET_REVIEW, [idReview]);
+    console.log(result);
+    return result.rows[0];
+  }
+  catch (err) {
+    throw new Error(err)
+  }
+}
 
 async function addReview(idUser, idMovie, rating, review) {
-        try {
-          result = await pgPool.query(sql.ADD_REVIEW, [idUser, idMovie, rating, review]);
-          return result.rowCount
-        } catch (err) {
-          throw new Error(err)
-        }
-      }
+  try {
+    let result = await pgPool.query(sql.ADD_REVIEW, [idUser, idMovie, rating, review]);
+    return result.rowCount
+  } catch (err) {
+    throw new Error(err)
+  }
+}
 
 async function removeReview(idReview) {
-        try {
-          let result = await pgPool.query(sql.REMOVE_REVIEW, [idReview]);
-          console.log(result.rowCount)
-          return result.rowCount
-        } catch (err) {
-          throw new Error(err)
-        }
-      }
+  try {
+    let result = await pgPool.query(sql.REMOVE_REVIEW, [idReview]);
+    console.log(result.rowCount)
+    return result.rowCount
+  } catch (err) {
+    throw new Error(err)
+  }
+}
 
 async function getReviewsByUser(idUser) {
-        try {
-          let result = await pgPool.query(sql.GET_ALL_REVIEWS_BY_USER, [idUser]);
-          console.log(result.rows);
-          return result.rows;
-        }
-        catch (err) {
-          throw new Error(err)
-        }
-      }
+  try {
+    let result = await pgPool.query(sql.GET_ALL_REVIEWS_BY_USER, [idUser]);
+    console.log(result.rows);
+    return result.rows;
+  }
+  catch (err) {
+    throw new Error(err)
+  }
+}
 
 async function getReviewsByMovie(idMovie) {
-        try {
-          let result = await pgPool.query(sql.GET_ALL_REVIEWS_BY_MOVIE, [idMovie]);
-          console.log(result.rows);
-          return result.rows;
-        }
-        catch (err) {
-          throw new Error(err)
-        }
-      }
+  try {
+    let result = await pgPool.query(sql.GET_ALL_REVIEWS_BY_MOVIE, [idMovie]);
+    console.log(result.rows);
+    return result.rows;
+  }
+  catch (err) {
+    throw new Error(err)
+  }
+}
 
 module.exports = { getReviews, getReview, addReview, removeReview, getReviewsByUser, getReviewsByMovie };

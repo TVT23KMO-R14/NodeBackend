@@ -20,9 +20,8 @@ async function register(firstName, lastName, userName, passwordHash, email) {
 async function getPassword(username) {
   try {
     const result = await pgPool.query(sql.GET_PASSWORD, [username]);
-    console.log('Successfully fetched password');
-    console.log(result)
-    console.log(username)
+    console.log('Successfully fetched password' + result);
+    console.log('username', username)
     if (result.rowCount > 0) {
       return result.rows[0].password;
     } else {
@@ -30,7 +29,8 @@ async function getPassword(username) {
     }
     
   } catch(err) {
-    throw new Error('Error getting password', err)
+    console.error('Error getting password:', err.message);
+    throw new Error('Error getting password' + err)
   }
 }
 

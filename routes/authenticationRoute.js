@@ -1,9 +1,10 @@
 require('dotenv').config();
 const router = require('express').Router();
 const bcrypt = require('bcrypt')
-const { register, getPasswordAndId } = require('..//models/authenticationModel')
+const { register, getPasswordAndId, deleteUser } = require('..//models/authenticationModel')
 const jwt = require('jsonwebtoken');
 const { response } = require('express');
+const { auth } = require('../middleware/auth');
 
 
 router.post('/register', async (req, res) => {
@@ -30,7 +31,7 @@ router.post('/login', async (req, res) => {
   console.log(uname)
   console.log(password)
 
-  
+
   try {
     const db_pw = await getPasswordAndId(uname);
     console.log('Password and id fetched from db: ' + db_pw.rows[0].password + ' ' + db_pw.rows[0].idUser)
@@ -52,9 +53,22 @@ router.post('/login', async (req, res) => {
     }
   } catch (error) {
     console.log(error)
-    res.status(404).json({ error: 'User not found: koko funktio', error: error });
+    res.status(404).json({ message: 'User not found: koko funktio', error: error });
   }
 })
+
+router.delete('/delete/:userName', auth, async (req, res) => {
+  const userName = req.params.userName;
+  const password = req.body.password; 
+
+  try {
+    const message = await deleteUser(userName, password);
+    res.status(200).json({ response: message });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 
 
 module.exports = router;

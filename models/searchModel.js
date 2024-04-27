@@ -84,5 +84,5 @@ module.exports = {
     getSearch,
     headerSearch,
     getOneMovie,
-    getOneSeries    
+    getOneSeries
 }

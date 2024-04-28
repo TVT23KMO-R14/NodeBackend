@@ -5,7 +5,7 @@ const sql = {
   GET_ALL_GROUPS: 'SELECT "idGroup", "groupName", "groupDescription" FROM "group"',
   GET_GROUP: 'SELECT "idGroup", "groupName", "groupDescription" FROM "group" WHERE "idGroup"=$1',
   REMOVE_GROUP: 'DELETE FROM "group" WHERE "idGroup"=$1',
-  ADD_GROUP: 'INSERT INTO "group" ("groupName", "groupDescription", "groupLogo") VALUES ($1, $2, $3)',
+  ADD_GROUP: 'INSERT INTO "group" ("groupName", "groupDescription", "groupLogo") VALUES ($1, $2, $3) RETURNING "idGroup"',
 }
 
 async function getGroups() {
@@ -31,7 +31,7 @@ async function getGroup(idGroup) {
 async function addGroup(groupName, groupDescription, groupLogo) {
   try {
     result = await pgPool.query(sql.ADD_GROUP, [groupName, groupDescription, groupLogo])
-    return result.rowCount
+    return result.rows[0]
   } catch (err) {
     throw new Error(err)
   }

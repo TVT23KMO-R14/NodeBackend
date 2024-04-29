@@ -1,6 +1,6 @@
 const router = require('express').Router()
 
-const { addUserToGroup, removeUserFromGroup, getGroupMembers, updateRole, getGroupMember, getGroupsByMember, getMembersByGroup } = require('../models/groupMemberModel')
+const { addUserToGroup, removeUserFromGroup, getGroupMembers, updateRole, getGroupMember, getGroupsByMember, getMembersByGroup, listAllGroupsWithMembership } = require('../models/groupMemberModel')
 
 router.post('/add', async (req, res) => {
     try {
@@ -76,8 +76,7 @@ router.get('/groupsbymember', async (req, res) => {
     } catch (err) {
         res.status(404).json({ error: err.message })
     }
-}
-)
+})
 
 router.get('/membersbygroup', async (req, res) => {
     try {
@@ -90,10 +89,20 @@ router.get('/membersbygroup', async (req, res) => {
     } catch (err) {
         res.status(404).json({ error: err.message })
     }
-}
-)
+})
 
-
+router.get('/listallgroupswithmembership', async (req, res) => {
+    try {
+        const groups = await listAllGroupsWithMembership(req.query.userId)
+        if (groups.length === 0) {
+            res.status(404).json({error: 'No groups found', status: 404})
+        }else{
+            res.json(groups)
+        }
+    } catch (err) {
+        res.status(404).json({ error: err.message })
+    }
+})
 
 /*
   https://stackoverflow.com/questions/14934452/how-to-get-all-registered-routes-in-express

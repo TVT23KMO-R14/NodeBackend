@@ -8,7 +8,28 @@ const sql = {
     GET_MEMBER: 'SELECT * FROM "groupMember" WHERE "user_idUser"=$1 AND "group_idGroup"=$2',
     UPDATE_ROLE: 'UPDATE "groupMember" SET "role"=$3 WHERE "user_idUser"=$1 AND "group_idGroup"=$2',
     GET_ALL_MEMBERS_BY_GROUP: 'SELECT * FROM "groupMember" WHERE "group_idGroup"=$1',
-    GET_ALL_GROUPS_BY_MEMBER: 'SELECT * FROM "groupMember" WHERE "user_idUser"=$1'
+    GET_ALL_GROUPS_BY_MEMBER: 'SELECT * FROM "groupMember" WHERE "user_idUser"=$1',
+    LIST_ALL_GROUPS_WITH_MEMBERSHIP: `
+    SELECT "group".*, 
+        CASE 
+            WHEN "groupMember"."user_idUser" IS NOT NULL THEN TRUE 
+            ELSE FALSE 
+            END AS "isMember"
+    FROM "group"
+    LEFT JOIN "groupMember" 
+    ON "group"."idGroup" = "groupMember"."group_idGroup" AND "groupMember"."user_idUser" = $1
+    ORDER BY "isMember" DESC, "group"."groupName" ASC
+    `
+}
+
+async function listAllGroupsWithMembership(userId) {
+    try {
+        console.log(userId)
+        const result = await pool.query(sql.LIST_ALL_GROUPS_WITH_MEMBERSHIP, [userId]);
+        return result.rows;  // This will return an array of group objects with an is_member flag
+    } catch (err) {
+        throw new Error(err);
+    }
 }
 
 async function addUserToGroup(userId, groupId, role) {
@@ -74,4 +95,4 @@ async function getMembersByGroup(groupId) {
     }
 }
 
-module.exports = { addUserToGroup, removeUserFromGroup, getGroupMembers, updateRole, getGroupMember, getGroupsByMember, getMembersByGroup }
+module.exports = { addUserToGroup, removeUserFromGroup, getGroupMembers, updateRole, getGroupMember, getGroupsByMember, getMembersByGroup, listAllGroupsWithMembership }

@@ -1,7 +1,7 @@
 require('dotenv').config();
 const router = require('express').Router();
 const bcrypt = require('bcrypt')
-const { register, getPassword, deleteUser } = require('..//models/authenticationModel')
+const { register, getPasswordAndId, deleteUser } = require('..//models/authenticationModel')
 const jwt = require('jsonwebtoken');
 const { response } = require('express');
 const { auth } = require('../middleware/auth');
@@ -26,32 +26,36 @@ router.post('/register', async (req, res) => {
 });
 
 router.post('/login', async (req, res) => {
+  const uname = req.body.username;
+  const password = req.body.password;
+  console.log(uname)
+  console.log(password)
+
+
   try {
-    const uname = req.body.userName;
-    const password = req.body.password;
-    const db_pw = await getPassword(uname);
-
+    const db_pw = await getPasswordAndId(uname);
+    console.log('Password and id fetched from db: ' + db_pw.rows[0].password + ' ' + db_pw.rows[0].idUser)
     if (db_pw) {
-      const isAuth = await bcrypt.compare(password, db_pw);
+      const isAuth = await bcrypt.compare(password, db_pw.rows[0].password);
       if (isAuth) {
-        if (!process.env.JWT_SECRET || process.env.JWT_SECRET.length === 0) {
-          return res.status(500).json({ error: 'JWT_SECRET is not set or too short' });
+        if (process.env.JWT_SECRET === undefined || process.env.JWT_SECRET === null || process.env.JWT_SECRET.length === '') {
+          res.status(500).json({ error: 'JWT_SECRET is not set or too short' })
+        } else {
+          //luodaan token
+          const token = jwt.sign({ userName: uname }, process.env.JWT_SECRET)
+          res.status(200).json({ jwtToken: token, id: db_pw.rows[0].idUser})
         }
-        const token = jwt.sign({ userName: uname }, process.env.JWT_SECRET);
-        return res.status(200).json({ jwtToken: token });
       } else {
-        return res.status(401).json({ error: 'Wrong password' });
+        res.status(401).json({ error: 'Wrong password' });
       }
-    }
-  } catch (err) {
-    if (err.message === 'User not found') {
-      return res.status(404).json({ error: 'User not found' });
     } else {
-      return res.status(500).json({ error: 'Internal server error: ' + err.message });
+      res.status(404).json({ error: 'User not found: db_pw_vertailu' });
     }
+  } catch (error) {
+    console.log(error)
+    res.status(404).json({ message: 'User not found: koko funktio', error: error });
   }
-});
-
+})
 
 router.delete('/delete/:userName', auth, async (req, res) => {
   const userName = req.params.userName;

@@ -8,7 +8,7 @@ const sql = {
     GET_MEMBER: 'SELECT * FROM "groupMember" WHERE "user_idUser"=$1 AND "group_idGroup"=$2',
     UPDATE_ROLE: 'UPDATE "groupMember" SET "role"=$3 WHERE "user_idUser"=$1 AND "group_idGroup"=$2',
     GET_ALL_MEMBERS_BY_GROUP: 'SELECT * FROM "groupMember" WHERE "group_idGroup"=$1',
-    GET_ALL_GROUPS_BY_MEMBER: 'SELECT * FROM "groupMember" WHERE "user_idUser"=$1'
+    GET_ALL_GROUPS_BY_MEMBER: 'SELECT "idGroup", "groupName", "groupDescription", "groupLogo" FROM "group" WHERE "idGroup" IN (SELECT "group_idGroup" FROM "groupMember" WHERE "user_idUser"=$1)'
 }
 
 async function addUserToGroup(userId, groupId, role) {
@@ -59,6 +59,7 @@ async function updateRole(userId, groupId, role) {
 async function getGroupsByMember(userId) {
     try {
         let result = await pool.query(sql.GET_ALL_GROUPS_BY_MEMBER, [userId])
+        console.log("UserId: "+ userId + " result.rows: ", result.rows)
         return result.rows
     } catch (err) {
         throw new Error(err)

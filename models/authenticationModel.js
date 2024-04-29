@@ -12,6 +12,7 @@ async function register(firstName, lastName, userName, passwordHash, email) {
     await pgPool.query(sql.REGISTER_USER, [firstName, lastName, userName, passwordHash, email])
     console.log('Successfully registered new user');
   } catch (err) {
+    console.log('Username already in use')
     throw new Error('Error inserting data into database', err)
   }
 
@@ -21,7 +22,7 @@ async function getPassword(username) {
   try {
     const result = await pgPool.query(sql.GET_PASSWORD, [username]);
     console.log('Successfully fetched password' + result);
-    console.log('username', username)
+    console.log('username:', username)
     if (result.rowCount > 0) {
       return result.rows[0].password;
     } else {
@@ -30,7 +31,7 @@ async function getPassword(username) {
     
   } catch(err) {
     console.error('Error getting password:', err.message);
-    throw new Error('Error getting password' + err)
+    throw new Error('Error getting password ' + err.message)
   }
 }
 
@@ -51,7 +52,7 @@ async function deleteUser(userName, password) {
       console.log(`${userName} deleted successfully.`);
       return `${userName} deleted successfully.`;
     } else {
-      throw new Error('User not found'); 
+      throw new Error('Incorrect password'); 
     }
   } catch (err) {
     console.error('Error deleting user:', err);

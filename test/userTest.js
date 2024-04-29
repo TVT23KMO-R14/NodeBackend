@@ -9,14 +9,14 @@ const userGlobal = {
   userName: 'test',
   password: 'test'
 };
-//use it."skip"('....')  for those tests that you dont want to run 
+//use it."skip"('....')  for those tests that you don't want to run 
 
 describe('POST /createUser', () => {
-  it.skip('should create a new user', (done) => {
+  it('should create a new user', (done) => {
     const user = {
       firstName: 'test',
       lastName: 'test',
-      userName: userGlobal.userName, //userName is unique so this needs to be changed if allready exist
+      userName: userGlobal.userName, //userName is unique so this needs to be changed if already exist
       password: userGlobal.password,
       email: 'test@test.test'
     };
@@ -30,7 +30,7 @@ describe('POST /createUser', () => {
         done();
       });
   });
-  it.skip('Should notify that the username is already in use', (done) => {
+  it('Should notify that the username is already in use', (done) => {
     const user = {
       firstName: 'test',
       lastName: 'test',
@@ -48,12 +48,11 @@ describe('POST /createUser', () => {
         done();
       });
   });
-
 });
 
 
 describe('POST /login', () => {
-  it.skip('should login with user', (done) => {
+  it('should login with user', (done) => {
 
     chai.request(server)
       .post('/auth/login')
@@ -79,12 +78,13 @@ describe('POST /login', () => {
       .end((err, res) => {
         if (err) done(err)
         expect(res).to.have.status(500)
-        console.log(user)
+        expect(res.body).to.have.property('error'); 
+        console.log('Response Message:', res.body.error);
         done()
       })
   }).timeout(5000)
 
-  it.skip('should return error if username or password is wrong', (done) => {
+  it('should return error if password is wrong', (done) => {
     const user = {
       userName: 'test',
       password: 'wrong password'
@@ -95,44 +95,72 @@ describe('POST /login', () => {
       .end((err, res) => {
         if (err) done(err)
         expect(res).to.have.status(401)
+        expect(res.body).to.have.property('error'); 
+        console.log('Response Message:', res.body.error);
+
         done()
       })
   })
 
 });
 
-/*
+
 describe('DELETE /delete/:userName', () => {
   it('should delete a user with the correct password and return a success message', (done) => {
 
-
     chai.request(server)
       .delete('/auth/delete/' + userGlobal.userName)
-      .set('Authorization', `Bearer ${token}`) // Removed this line as token is not needed
+      .set('Authorization', `Bearer ${token}`) 
       .send(userGlobal)
       .end((err, res) => {
-        if (err) return done(err); // Proper error handling
+        if (err) return done(err); 
 
-        expect(res).to.have.status(200); // Check for the correct response status code
-        expect(res.body).to.have.property('message'); // Check if response contains 'message' property
+        expect(res).to.have.status(200); 
+        expect(res.body).to.have.property('message'); 
         console.log('Response Message:', res.body.message);
         console.log('User Info:', userGlobal);
 
-        done(); // Complete the test
-      });
-  });
-
-  it.skip('should not delete a user with an incorrect password', (done) => {
-    chai.request(server)
-      .delete('/delete/test')
-      .set('Authorization', `Bearer ${token}`)
-      .send({ userName: 'test', password: 'wrongpassword' })
-      .end((err, res) => {
-        if (err) done(err);
-        expect(res).to.have.status(404);
-        expect(res.body).to.have.property('error', 'Incorrect password');
         done();
       });
   });
-});
-*/
+  it('should not delete user with wrong credentials', (done) => {
+    const user = {
+      userName: 'wrong username',
+      password: 'wrong password'
+    }
+    chai.request(server)
+      .delete('/auth/delete/' + user.userName)
+      .set('Authorization', `Bearer ${token}`)
+      .send(user)
+      .end((err, res) => { 
+        if (err) return done(err);
+  
+        expect(res).to.have.status(500);
+        expect(res.body).to.have.property('error');
+        console.log('error', res.body.error);
+        console.log('User Info:', user);
+  
+        done();
+      });
+  });
+  it('should not delete user without jwt token', (done) => {
+    const user = {
+      userName: 'wrong username',
+      password: 'wrong password'
+    }
+    chai.request(server)
+      .delete('/auth/delete/' + user.userName)
+      .send(user)
+      .end((err, res) => { 
+        if (err) return done(err);
+  
+        expect(res).to.have.status(403);
+        expect(res.body).to.have.property('error');
+        console.log('error', res.body.error);
+        console.log('User Info:', user);
+  
+        done();
+      });
+  });
+})  
+  

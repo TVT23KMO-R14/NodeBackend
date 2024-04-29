@@ -1,0 +1,74 @@
+
+> grouppageroutesandmodels@0.0.0 test
+> mocha
+
+
+
+  Search
+    Search
+[0mGET /search/headersearch?query=correct_query&api_key=f666da4ee84cf1ba2007deafac53b429&page=1 [32m200 [0m74.741 ms - 26[0m
+      ✔ should return results for a correct search query (88ms)
+[0mGET /search/headersearch?query=no_matching_query&api_key=f666da4ee84cf1ba2007deafac53b429&page=1 [32m200 [0m29.851 ms - 26[0m
+      ✔ should return no results for a query with no matches
+    Search
+[0mGET /search/headersearch?query=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&api_key=f666da4ee84cf1ba2007deafac53b429&page=1 [32m200 [0m35.656 ms - 26[0m
+      ✔ should handle very long string queries (38ms)
+[0mGET /search/headersearch?query=%40%23%24%25%5E%C3%A4%C3%B6&api_key=f666da4ee84cf1ba2007deafac53b429&page=1 [32m200 [0m38.491 ms - 24780[0m
+      ✔ should handle queries with special characters (41ms)
+
+  POST /createUser
+[0mPOST /auth/register [32m201 [0m119.700 ms - 40[0m
+    ✔ should create a new user (123ms)
+[0mPOST /auth/register [33m404 [0m71.497 ms - 31[0m
+    ✔ Should notify that the username is already in use (74ms)
+
+  POST /login
+[0mPOST /auth/login [32m200 [0m142.728 ms - 153[0m
+    ✔ should login with user (145ms)
+[0mPOST /auth/login [31m500 [0m18.043 ms - 26[0m
+    ✔ should return error if user is not found
+[0mPOST /auth/login [33m401 [0m66.407 ms - 26[0m
+    ✔ should return error if password is wrong (69ms)
+
+  DELETE /delete/:userName
+[0mDELETE /auth/delete/test [32m200 [0m99.467 ms - 41[0m
+    ✔ should delete a user with the correct password and return a success message (101ms)
+[0mDELETE /auth/delete/wrong%20username [31m500 [0m21.365 ms - 25[0m
+    ✔ should not delete user with wrong credentials
+[0mDELETE /auth/delete/wrong%20username [33m403 [0m0.472 ms - 71[0m
+    ✔ should not delete user without jwt token
+
+
+  12 passing (768ms)
+
+
+> grouppageroutesandmodels@0.0.0 testuser
+> mocha test/userTest.js
+
+
+
+  POST /createUser
+[0mPOST /auth/register [32m201 [0m176.515 ms - 40[0m
+    ✔ should create a new user (190ms)
+[0mPOST /auth/register [33m404 [0m70.073 ms - 31[0m
+    ✔ Should notify that the username is already in use (73ms)
+
+  POST /login
+[0mPOST /auth/login [32m200 [0m72.758 ms - 153[0m
+    ✔ should login with user (75ms)
+[0mPOST /auth/login [31m500 [0m18.200 ms - 26[0m
+    ✔ should return error if user is not found
+[0mPOST /auth/login [33m401 [0m76.611 ms - 26[0m
+    ✔ should return error if password is wrong (80ms)
+
+  DELETE /delete/:userName
+[0mDELETE /auth/delete/test [32m200 [0m117.615 ms - 41[0m
+    ✔ should delete a user with the correct password and return a success message (120ms)
+[0mDELETE /auth/delete/wrong%20username [31m500 [0m21.474 ms - 25[0m
+    ✔ should not delete user with wrong credentials
+[0mDELETE /auth/delete/wrong%20username [33m403 [0m0.410 ms - 71[0m
+    ✔ should not delete user without jwt token
+
+
+  8 passing (590ms)
+

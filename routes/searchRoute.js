@@ -4,6 +4,7 @@ const axios = require('axios');
 require('dotenv').config();
 const searchModel = require('../models/searchModel')
 
+
 router.get('/', (req, res) => {
     res.send('searchModel toimii');
 })
@@ -69,6 +70,29 @@ router.get('/oneseries', async (req, res) => {
         res.status(500).json({ error: 'Error fetching data' })
     }
 })
+
+router.get('/genres/combined', async (req, res) => {
+    const apiKey = process.env.TMDB_API_KEY; 
+    const movieGenresUrl = `https://api.themoviedb.org/3/genre/movie/list?api_key=${apiKey}&language=en-US`;
+    const tvGenresUrl = `https://api.themoviedb.org/3/genre/tv/list?api_key=${apiKey}&language=en-US`;
+
+    try {
+        
+        const [movieGenresResponse, tvGenresResponse] = await Promise.all([
+            axios.get(movieGenresUrl),
+            axios.get(tvGenresUrl)
+        ]);
+
+        const combinedGenres = [...movieGenresResponse.data.genres, ...tvGenresResponse.data.genres];
+
+        const uniqueGenres = Array.from(new Map(combinedGenres.map(genre => [genre.id, genre])).values());
+
+        res.json(uniqueGenres);
+    } catch (error) {
+        console.error('Error fetching genres', error);
+        res.status(500).json({ error: 'Error fetching genres' });
+    }
+});
 
 
 module.exports = router;

@@ -2,6 +2,7 @@ const { getGroups, getGroup, addGroup, removeGroup} = require('../models/groupMo
 
 const router = require('express').Router()
 
+
 router.get('/all', async (req, res) => {
   try {
     const group = await getGroups()
@@ -34,7 +35,7 @@ router.post('/add', async (req, res) => {
     if (result === 0) {
       res.status(404).json({ error: 'Group not added', status: 404})
     }else{
-      res.status(201).json({message: "Group added", status: 201})
+      res.status(201).json({message: "Group added", result: result, status: 201})
     }
     //res.status(201).json({ message: result })
     //res.render('result', { title: 'Group added', message: result, groupname: req.body.groupName, groupdescription: req.body.groupDescription, grouplogo: req.body.groupLogo});

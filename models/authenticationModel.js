@@ -12,6 +12,7 @@ async function register(firstName, lastName, userName, passwordHash, email) {
     await pgPool.query(sql.REGISTER_USER, [firstName, lastName, userName, passwordHash, email])
     console.log('Successfully registered new user');
   } catch (err) {
+    console.log('Username already in use')
     throw new Error('Error inserting data into database', err)
   }
   
@@ -32,17 +33,23 @@ async function getPasswordAndId(username) {
       throw new Error('User not found')
     }    
   } catch(err) {
-    throw new Error('Error getting password', err)
+    const error = new Error("no user found")
+    error.status = "500"
+    throw error
+    //console.error('Error getting password:', err.message);
+    //throw new Error('Error getting password ' + err.message)
   }
 }
 
+
 async function deleteUser(userName, password) {
   try {
-    const passwordHash = await getPassword(userName);
+    const passwordAndId = await getPasswordAndId(userName);
+    const passwordHash = passwordAndId.rows[0].password
     if (!passwordHash) {
       throw new Error('User not found');
     }
-
+    console.log('authModel user info: ' + userName + ' ' + password + ' ' + passwordHash)
     const passwordMatch = await bcrypt.compare(password, passwordHash);
     if (!passwordMatch) {
       throw new Error('Incorrect password');
@@ -53,7 +60,7 @@ async function deleteUser(userName, password) {
       console.log(`${userName} deleted successfully.`);
       return `${userName} deleted successfully.`;
     } else {
-      throw new Error('User not found'); 
+      throw new Error('Incorrect password'); 
     }
   } catch (err) {
     console.error('Error deleting user:', err);

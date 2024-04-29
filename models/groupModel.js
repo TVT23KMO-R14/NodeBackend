@@ -2,8 +2,8 @@ const { use } = require('../routes/groupRoute')
 const pgPool = require('../dbconnection')
 
 const sql = {
-  GET_ALL_GROUPS: 'SELECT "idGroup", "groupName", "groupDescription" FROM "group"',
-  GET_GROUP: 'SELECT "idGroup", "groupName", "groupDescription" FROM "group" WHERE "idGroup"=$1',
+  GET_ALL_GROUPS: 'SELECT "idGroup", "groupName", "groupDescription", "groupLogo" FROM "group"',
+  GET_GROUP: 'SELECT "idGroup", "groupName", "groupDescription", "groupLogo" FROM "group" WHERE "idGroup"=$1',
   REMOVE_GROUP: 'DELETE FROM "group" WHERE "idGroup"=$1',
   ADD_GROUP: 'INSERT INTO "group" ("groupName", "groupDescription", "groupLogo") VALUES ($1, $2, $3)',
 }

@@ -26,10 +26,11 @@ router.post('/register', async (req, res) => {
 });
 
 router.post('/login', async (req, res) => {
+  console.log(req.body.userName)
   const uname = req.body.username;
   const password = req.body.password;
-  console.log(uname)
-  console.log(password)
+  console.log('routermodel username: ' + uname)
+  console.log('routermodel password: ' + password)
 
 
   try {
@@ -49,23 +50,23 @@ router.post('/login', async (req, res) => {
         res.status(401).json({ error: 'Wrong password' });
       }
     } else {
-      res.status(404).json({ error: 'User not found: db_pw_vertailu' });
+      res.status(500).json({ error: 'User not found: db_pw_vertailu' });
     }
   } catch (error) {
     console.log(error)
-    res.status(404).json({ message: 'User not found: koko funktio', error: error });
+    //res.status(404).json({ message: 'User not found: koko funktio', error: error });
+    res.status(error.status).json({error: error})
   }
 })
 
 router.delete('/delete/:userName', auth, async (req, res) => {
   const userName = req.params.userName;
-  const password = req.body.password;
+  const password = req.body.password; 
 
   try {
     const message = await deleteUser(userName, password);
-    res.status(200).json({ message: message });
+    res.status(200).json({ response: message });
   } catch (error) {
-    console.log('authentication route' + error)
     res.status(500).json({ error: error.message });
   }
 });

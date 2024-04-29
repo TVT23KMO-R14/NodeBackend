@@ -33,18 +33,23 @@ async function getPasswordAndId(username) {
       throw new Error('User not found')
     }    
   } catch(err) {
-    console.error('Error getting password:', err.message);
-    throw new Error('Error getting password ' + err.message)
+    const error = new Error("no user found")
+    error.status = "500"
+    throw error
+    //console.error('Error getting password:', err.message);
+    //throw new Error('Error getting password ' + err.message)
   }
 }
 
+
 async function deleteUser(userName, password) {
   try {
-    const passwordHash = await getPassword(userName);
+    const passwordAndId = await getPasswordAndId(userName);
+    const passwordHash = passwordAndId.rows[0].password
     if (!passwordHash) {
       throw new Error('User not found');
     }
-
+    console.log('authModel user info: ' + userName + ' ' + password + ' ' + passwordHash)
     const passwordMatch = await bcrypt.compare(password, passwordHash);
     if (!passwordMatch) {
       throw new Error('Incorrect password');

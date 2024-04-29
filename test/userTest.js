@@ -2,6 +2,9 @@ let chai = require('chai');
 let chaiHttp = require('chai-http');
 let server = require('../app');
 let expect = chai.expect;
+console.log = function noConsole() {
+
+}
 
 chai.use(chaiHttp);
 let token
@@ -51,12 +54,17 @@ describe('POST /createUser', () => {
 });
 
 
+
 describe('POST /login', () => {
   it('should login with user', (done) => {
-
+    console.log('testi 1 login: ' + userGlobal.userName)
+    const user = {
+      username: userGlobal.userName, //userName is unique so this needs to be changed if already exist
+      password: userGlobal.password,
+    }
     chai.request(server)
       .post('/auth/login')
-      .send(userGlobal)
+      .send(user)
       .end((err, res) => {
         if (err) done(err);
         token = res.body.jwtToken;
@@ -69,7 +77,7 @@ describe('POST /login', () => {
 
   it('should return error if user is not found', (done) => {
     const user = {
-      userName: 'wrong username',
+      username: 'wrong username',
       password: 'test'
     }
     chai.request(server)
@@ -86,7 +94,7 @@ describe('POST /login', () => {
 
   it('should return error if password is wrong', (done) => {
     const user = {
-      userName: 'test',
+      username: 'test',
       password: 'wrong password'
     }
     chai.request(server)
@@ -116,8 +124,8 @@ describe('DELETE /delete/:userName', () => {
         if (err) return done(err); 
 
         expect(res).to.have.status(200); 
-        expect(res.body).to.have.property('message'); 
-        console.log('Response Message:', res.body.message);
+        expect(res.body).to.have.property('response'); 
+        console.log('Response Message:', res.body.response);
         console.log('User Info:', userGlobal);
 
         done();
@@ -163,4 +171,5 @@ describe('DELETE /delete/:userName', () => {
       });
   });
 })  
+
   

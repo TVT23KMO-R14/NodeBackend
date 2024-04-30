@@ -8,7 +8,7 @@ const sql = {
     GET_MEMBER: 'SELECT * FROM "groupMember" WHERE "user_idUser"=$1 AND "group_idGroup"=$2',
     UPDATE_ROLE: 'UPDATE "groupMember" SET "role"=$3 WHERE "user_idUser"=$1 AND "group_idGroup"=$2',
     GET_ALL_MEMBERS_BY_GROUP: 'SELECT * FROM "groupMember" WHERE "group_idGroup"=$1',
-    GET_ALL_GROUPS_BY_MEMBER: 'SELECT * FROM "groupMember" WHERE "user_idUser"=$1',
+    GET_ALL_GROUPS_BY_MEMBER: 'SELECT "idGroup", "groupName", "groupDescription", "groupLogo" FROM "group" WHERE "idGroup" IN (SELECT "group_idGroup" FROM "groupMember" WHERE "user_idUser"=$1)',
     LIST_ALL_GROUPS_WITH_MEMBERSHIP: `
     SELECT "group".*, 
         CASE 
@@ -26,11 +26,10 @@ async function listAllGroupsWithMembership(userId) {
     try {
         console.log(userId)
         const result = await pool.query(sql.LIST_ALL_GROUPS_WITH_MEMBERSHIP, [userId]);
-        return result.rows;  // This will return an array of group objects with an is_member flag
+        return result.rows;
     } catch (err) {
         throw new Error(err);
     }
-    GET_ALL_GROUPS_BY_MEMBER: 'SELECT "idGroup", "groupName", "groupDescription", "groupLogo" FROM "group" WHERE "idGroup" IN (SELECT "group_idGroup" FROM "groupMember" WHERE "user_idUser"=$1)'
 }
 
 async function addUserToGroup(userId, groupId, role) {

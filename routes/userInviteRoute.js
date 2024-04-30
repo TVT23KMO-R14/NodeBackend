@@ -66,6 +66,7 @@ router.get('/bygroupadmin', async (req, res) => {
       res.json(invites)
     }
   } catch (err) {
+    console.log("Error:", err)
     res.status(404).json({ error: err.message })
   }
 })

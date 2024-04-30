@@ -61,11 +61,12 @@ router.get('/bygroupadmin', async (req, res) => {
   try {
     const invites = await getInvitesByGroupAdmin(req.query.userId);
     if (invites.length === 0) {
-      res.status(404).json({ error: 'No invites found' })
+      res.json({ message: 'No invites found' })
     } else {
       res.json(invites)
     }
   } catch (err) {
+    console.log("Error:", err)
     res.status(404).json({ error: err.message })
   }
 })

@@ -7,7 +7,7 @@ const sql = {
     GET_ALL_MEMBERS: 'SELECT * FROM "groupMember"',
     GET_MEMBER: 'SELECT * FROM "groupMember" WHERE "user_idUser"=$1 AND "group_idGroup"=$2',
     UPDATE_ROLE: 'UPDATE "groupMember" SET "role"=$3 WHERE "user_idUser"=$1 AND "group_idGroup"=$2',
-    GET_ALL_MEMBERS_BY_GROUP: 'SELECT * FROM "groupMember" WHERE "group_idGroup"=$1',
+    GET_ALL_MEMBERS_BY_GROUP: 'SELECT "groupMember"."group_idGroup", "groupMember"."role", "groupMember"."user_idUser", "users"."userName" FROM "groupMember" JOIN "users" ON "groupMember"."user_idUser" = "users"."idUser" WHERE "groupMember"."group_idGroup" = $1',
     GET_ALL_GROUPS_BY_MEMBER: 'SELECT "idGroup", "groupName", "groupDescription", "groupLogo" FROM "group" WHERE "idGroup" IN (SELECT "group_idGroup" FROM "groupMember" WHERE "user_idUser"=$1)',
     LIST_ALL_GROUPS_WITH_MEMBERSHIP: `
     SELECT "group".*, 

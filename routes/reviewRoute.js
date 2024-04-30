@@ -62,6 +62,7 @@ router.get('/byuser', async (req, res) => {
         if (reviews.length === 0) {
             throw new Error('Reviews not found by this user')
         }else{
+        console.log(reviews)
         res.json(reviews)
         }
     } catch (err) {

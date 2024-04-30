@@ -65,16 +65,20 @@ router.put('/update', async (req, res) => {
 }
 )
 
-router.get('/groupsbymember', async (req, res) => {
+router.get('/bymember', async (req, res) => {
     try {
         const groups = await getGroupsByMember(req.query.userId)
         if (groups.length === 0) {
-            res.status(404).json({error: 'No groups found for member', status: 404})
+            res.json([
+                {
+                    groupName: 'No groups found for user',
+                }
+            ])
         }else{
             res.json(groups)
         }
     } catch (err) {
-        res.status(404).json({ error: err.message })
+        res.status(404).json({ message: err.message })
     }
 })
 
@@ -87,7 +91,7 @@ router.get('/membersbygroup', async (req, res) => {
             res.json(members)
         }
     } catch (err) {
-        res.status(404).json({ error: err.message })
+        res.status(404).json({ message: err.message })
     }
 })
 

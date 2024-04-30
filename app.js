@@ -45,13 +45,13 @@ app.use('/review', reviewRouter);
 app.use('/invite', inviteRouter);
 
 
-/*
-const PORT = process.env.PORT || 3001;
 
-app.listen(PORT, () => {
-    console.log('Server running on port ' + PORT);
-});
-*/
+//const PORT = process.env.PORT || 3000;
+
+//app.listen(PORT, () => {
+//    console.log('Server running on port ' + PORT);
+//});
+
 // Tietokantayhteyden testaus
 pool.query('SELECT NOW()', (err, res) => {
   if (err) {

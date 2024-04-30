@@ -30,6 +30,7 @@ async function listAllGroupsWithMembership(userId) {
     } catch (err) {
         throw new Error(err);
     }
+    GET_ALL_GROUPS_BY_MEMBER: 'SELECT "idGroup", "groupName", "groupDescription", "groupLogo" FROM "group" WHERE "idGroup" IN (SELECT "group_idGroup" FROM "groupMember" WHERE "user_idUser"=$1)'
 }
 
 async function addUserToGroup(userId, groupId, role) {
@@ -80,6 +81,7 @@ async function updateRole(userId, groupId, role) {
 async function getGroupsByMember(userId) {
     try {
         let result = await pool.query(sql.GET_ALL_GROUPS_BY_MEMBER, [userId])
+        console.log("UserId: "+ userId + " result.rows: ", result.rows)
         return result.rows
     } catch (err) {
         throw new Error(err)

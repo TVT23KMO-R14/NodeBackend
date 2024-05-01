@@ -2,7 +2,12 @@ const { use } = require('../routes/reviewRoute');
 const pgPool = require('../dbconnection');
 
 const sql = {
-  GET_ALL_REVIEWS: 'SELECT * FROM "review"',
+  GET_ALL_REVIEWS: `
+              SELECT "review".*, "users"."userName"
+              FROM "review"
+              LEFT JOIN "users"
+              ON "review"."user_idUser" = "users"."idUser"
+                                `,
   GET_REVIEW: 'SELECT * FROM "review" WHERE "idReview"=$1',
   REMOVE_REVIEW: 'DELETE FROM "review" WHERE "idReview"=$1',
   ADD_REVIEW: 'INSERT INTO "review" ("user_idUser", "idMovie", "rating", "review") VALUES ($1, $2, $3, $4)',

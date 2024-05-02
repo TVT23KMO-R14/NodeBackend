@@ -19,7 +19,7 @@ router.get('/one', async (req, res) => {
     try {
         const review = await getReview(req.query.idReview);
         if (review===undefined) {
-            res.status(404).json({ error: 'Review not found' })
+            res.json({ error: 'Review not found' })
         }else{
             res.json(review)
         }
@@ -27,6 +27,7 @@ router.get('/one', async (req, res) => {
         res.status(404).json({ error: err.message })
     }
 })
+
 router.post('/add', async (req, res) => {
     try {
         const result = await addReview(req.body.idUser, req.body.idMovie, req.body.rating, req.body.review, req.body.reviewType, req.body.reviewImg, req.body.reviewObjectName);
@@ -35,7 +36,6 @@ router.post('/add', async (req, res) => {
         } else {
             res.status(201).json({ message: "Review added", status: 201 })
         }
-        //res.render('movieAdded', { title: 'Movie added', message: result, idMovie: req.body.idMovie, rating: req.body.rating, review: req.body.review });
     } catch (err) {
         res.status(404).json({ error: err.message })
     }
@@ -73,7 +73,7 @@ router.get('/bymovie', async (req, res) => {
     try {
         const reviews = await getReviewsByMovie(req.query.idMovie);
         if (reviews.length === 0) {
-            res.status(404).json({ error: 'Reviews not found' })
+            res.json({ message: 'No reviews found' })
         }else{
             res.json(reviews)
         }

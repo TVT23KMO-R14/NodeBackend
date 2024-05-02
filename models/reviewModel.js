@@ -8,11 +8,11 @@ const sql = {
               LEFT JOIN "users"
               ON "review"."user_idUser" = "users"."idUser"
                                 `,
-  GET_REVIEW: 'SELECT * FROM "review" WHERE "idReview"=$1',
+  GET_REVIEW: 'SELECT "review".*, "users"."userName" FROM "review" LEFT JOIN "users" ON "review"."user_idUser" = "users"."idUser" WHERE "idReview"=$1',
   REMOVE_REVIEW: 'DELETE FROM "review" WHERE "idReview"=$1',
   ADD_REVIEW: 'INSERT INTO "review" ("user_idUser", "idMovie", "rating", "review", "reviewType", "reviewImg", "reviewObjectName") VALUES ($1, $2, $3, $4, $5, $6, $7)',
-  GET_ALL_REVIEWS_BY_USER: 'SELECT * FROM "review" WHERE "user_idUser"=$1',
-  GET_ALL_REVIEWS_BY_MOVIE: 'SELECT * FROM "review" WHERE "idMovie"=$1',
+  GET_ALL_REVIEWS_BY_USER: 'SELECT "review".*, "users"."userName" FROM "review" LEFT JOIN "users" ON "review"."user_idUser" = "users"."idUser" WHERE "user_idUser"=$1',
+  GET_ALL_REVIEWS_BY_MOVIE: 'Select "review".*, "users"."userName" FROM "review" LEFT JOIN "users" ON "review"."user_idUser" = "users"."idUser" WHERE "idMovie"=$1'
 }
 
 async function getReviews() {

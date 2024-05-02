@@ -47,6 +47,7 @@ router.delete('/remove', async (req, res) => {
   try {
     const result = await removeInvite(req.query.idInvite)
     if (result === 0) {
+      console.log("Invite not found", req.query)
       res.status(404).json({ error: 'Invite not found', status: 404})
     } else {
       res.status(200).json({message: "Invite removed", status: 200})

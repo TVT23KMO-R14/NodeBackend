@@ -21,6 +21,7 @@ var indexRouter = require('./routes/index');
 const groupMemberRouter = require('./routes/groupMemberRoute');
 var searchRouter = require('./routes/searchRoute');
 const inviteRouter = require('./routes/userInviteRoute');
+const groupContentRouter = require('./routes/groupContentRoute');
 
 
 var app = express();
@@ -44,6 +45,7 @@ app.use('/groupmember', groupMemberRouter);
 app.use('/search', searchRouter);
 app.use('/review', reviewRouter);
 app.use('/invite', inviteRouter);
+app.use('/groupcontent', groupContentRouter);
 
 
 

@@ -10,11 +10,10 @@ const sql = {
                                 `,
   GET_REVIEW: 'SELECT * FROM "review" WHERE "idReview"=$1',
   REMOVE_REVIEW: 'DELETE FROM "review" WHERE "idReview"=$1',
-  ADD_REVIEW: 'INSERT INTO "review" ("user_idUser", "idMovie", "rating", "review") VALUES ($1, $2, $3, $4)',
+  ADD_REVIEW: 'INSERT INTO "review" ("user_idUser", "idMovie", "rating", "review", "reviewType", "reviewImg", "reviewObjectName") VALUES ($1, $2, $3, $4, $5, $6, $7)',
   GET_ALL_REVIEWS_BY_USER: 'SELECT * FROM "review" WHERE "user_idUser"=$1',
   GET_ALL_REVIEWS_BY_MOVIE: 'SELECT * FROM "review" WHERE "idMovie"=$1',
 }
-
 
 async function getReviews() {
   try {
@@ -38,9 +37,9 @@ async function getReview(idReview) {
   }
 }
 
-async function addReview(idUser, idMovie, rating, review) {
+async function addReview(idUser, idMovie, rating, review, reviewType, reviewImg, reviewObjectName) {
   try {
-    let result = await pgPool.query(sql.ADD_REVIEW, [idUser, idMovie, rating, review]);
+    let result = await pgPool.query(sql.ADD_REVIEW, [idUser, idMovie, rating, review, reviewType, reviewImg, reviewObjectName]);
     return result.rowCount
   } catch (err) {
     throw new Error(err)

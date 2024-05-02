@@ -27,10 +27,9 @@ router.get('/one', async (req, res) => {
         res.status(404).json({ error: err.message })
     }
 })
-
 router.post('/add', async (req, res) => {
     try {
-        const result = await addReview(req.body.idUser, req.body.idMovie, req.body.rating, req.body.review);
+        const result = await addReview(req.body.idUser, req.body.idMovie, req.body.rating, req.body.review, req.body.reviewType, req.body.reviewImg, req.body.reviewObjectName);
         if (result.rowCount === 0) {
             res.status(404).json({ error: 'Review not added', status: 404 })
         } else {

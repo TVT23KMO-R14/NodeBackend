@@ -59,7 +59,7 @@ Sovelluksen backend on toteutettu Node.js:llä joka mahdollistaa Frontendin ohel
 Sovelluksen tietokannan ja palvelimen välillä JSON datan vastaanottamiseen käytettiin REST rajapintaa. REST-Rajapinta tarjoaa erilaisten päätepisteiden toiminnallisuuksien hallinnan halutulla endpointilla. Esimerkiksi käyttäjän arvostelujen lisäämiseen on mahdollista /review/add endpointilla. Sille annetaan parametreinä käyttäjän id, elokuvan id TMBD:stä, arvostelun arvosanana ja käyttäjän kirjoittama arvostelu elokuvasta. Palautteena käyttäjä saa HTML-statuskoodin operaation onnistumisesta tai virheilmoituksen sen epäonnistumisesta.
 
 #### Dokumentaatio
-Rajapinnan dokumentaation toteutimme Postman-työkalua hyväksikäyttäen. Sitä varten kaikkien endpointtien tuli palauttaa response koodi ja antaa vastaus JSON-formaatissa. Dokumentaatio sisältää kuvaukset kunkin endpointin toiminnasta, mukaan lukien pyyntöön tarvittavat parametrit ja vastausrakenteet.
+Rajapinnan dokumentaation, [https://documenter.getpostman.com/view/33771120/2sA3Bq3Vjn](https://documenter.getpostman.com/view/33771120/2sA3Bq3Vjn), toteutimme Postman-työkalua hyväksikäyttäen. Sitä varten kaikkien endpointtien tuli palauttaa response koodi ja antaa vastaus JSON-formaatissa. Dokumentaatio sisältää kuvaukset kunkin endpointin toiminnasta, mukaan lukien pyyntöön tarvittavat parametrit ja vastausrakenteet. 
 
 ![](/readmeKuvat/6PostmanKuva.png)<br>
 **Kuva 6.** Postman-dokumentaatio ryhmän jäsenten listaamisesta.
